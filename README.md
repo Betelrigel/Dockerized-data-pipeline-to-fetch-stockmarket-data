@@ -1,37 +1,47 @@
-Dockerized Stock Market Data Pipeline with Dagster
+# Dockerized Stock Market Data Pipeline with Dagster
+
 This project is a complete, containerized data pipeline that automatically fetches daily stock market data from the Alpha Vantage API and stores it in a PostgreSQL database. The pipeline is orchestrated using Dagster and is deployed with a single command via Docker Compose, making it secure and reproducible.
-Technical Specifications and Features
+
+## Technical Specifications and Features
+
 The pipeline is built to meet all assignment requirements:
 
-Containerized Deployment: The entire application stack (PostgreSQL, Dagster UI, Dagster Daemon) is defined in a docker-compose.yml file for easy deployment.
-Data Orchestration: Dagster is used to schedule and manage the execution of the data fetching job.
-API Interaction and Logic: A Python script uses the requests library to fetch JSON data, parses the response, and inserts the extracted information into a PostgreSQL table.
-Error Handling: The core logic incorporates comprehensive try-except blocks to ensure robustness against network, parsing, and database failures.
-Security: Sensitive credentials (API keys and database details) are managed via environment variables defined in the .env file.
+- **Containerized Deployment**: The entire application stack (PostgreSQL, Dagster UI, Dagster Daemon) is defined in a `docker-compose.yml` file for easy deployment.
+- **Data Orchestration**: Dagster is used to schedule and manage the execution of the data fetching job.
+- **API Interaction and Logic**: A Python script uses the `requests` library to fetch JSON data, parses the response, and inserts the extracted information into a PostgreSQL table.
+- **Error Handling**: The core logic incorporates comprehensive `try-except` blocks to ensure robustness against network, parsing, and database failures.
+- **Security**: Sensitive credentials (API keys and database details) are managed via environment variables defined in the `.env` file.
 
-Prerequisites
+## Prerequisites
+
 Before you begin, ensure you have the following installed on your system:
 
-Docker
-Docker Compose (Included with Docker Desktop)
+- Docker
+- Docker Compose (Included with Docker Desktop)
 
-Getting Started (How to Build and Deploy)
+## Getting Started (How to Build and Deploy)
+
 Follow these steps to build and run the entire pipeline stack.
-1. Clone the Repository
+
+### 1. Clone the Repository
+
 First, clone this repository to your local machine.
+
+```bash
 git clone https://github.com/Betelrigel/Dockerized-data-pipeline-to-fetch-stockmarket-data.git
 cd Dockerized-data-pipeline-to-fetch-stockmarket-data
 
-2. Configure Environment Variables
+### 2. Configure Environment Variables
 This project uses an .env file to manage secret credentials. A secure template (.env.example) is provided.
 Copy the template file:
+
+```bash
 cp .env.example .env
-
 Edit the .env file: Open the newly created .env file and input your actual PostgreSQL credentials and your Alpha Vantage API key where indicated by the placeholders.
-3. Build and Start Services
-Execute the following command from the root of the project directory. This command builds the custom Dagster image and starts all dependent services (PostgreSQL, Dagster Webserver, and Dagster Daemon).
-docker-compose up --build
 
+### 3. Build and Start Services
+Execute the following command from the root of the project directory. This command builds the custom Dagster image and starts all dependent services (PostgreSQL, Dagster Webserver, and Dagster Daemon).
+bashdocker-compose up --build
 Note: The --build flag is only required the first time you run the deployment.
 Usage Guide (How to Run the Pipeline)
 Once all containers are up and running, you can interact with the system via the Dagster UI.
@@ -52,18 +62,15 @@ After a successful run, verify that the data has been inserted into the PostgreS
 Open a new terminal window (keeping the docker-compose up session running).
 Execute the following command to connect to the database container:
 
-docker exec -it postgres_db psql -U your_username -d stock_market
-
+bashdocker exec -it postgres_db psql -U your_username -d stock_market
 (Replace your_username with the user defined in your .env file.)
 
 Enter your database password when prompted.
 Run a SQL query to inspect the data:
 
-SELECT * FROM stock_data ORDER BY date DESC LIMIT 10;
-
+sqlSELECT * FROM stock_data ORDER BY date DESC LIMIT 10;
 Stopping the Pipeline
 To gracefully stop all running containers, return to the original terminal session and press Ctrl + C. Then, remove the container instances:
-docker-compose down
-
+bashdocker-compose down
 To remove the containers and the persisted PostgreSQL volume (deleting all stored data), use:
-docker-compose down -v
+bashdocker-compose down -v
