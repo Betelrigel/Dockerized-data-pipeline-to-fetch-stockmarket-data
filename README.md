@@ -36,7 +36,8 @@ First, clone this repository to your local machine.
 ```bash
 git clone https://github.com/your-username/your-repository-name.git
 cd your-repository-name
-2. Configure Environment Variables
+
+### 2. Configure Environment Variables
 This project uses an .env file to manage secret credentials. A secure template (.env.example) is provided.
 Copy the template file:
 code
@@ -80,3 +81,4 @@ To remove the containers and the persisted PostgreSQL volume (deleting all store
 code
 Bash
 docker-compose down -v```
+
