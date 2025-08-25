@@ -35,5 +35,8 @@ First, clone this repository to your local machine.
 
 ```bash
 git clone https://github.com/your-username/your-repository-name.git
-cd your-repository-name
+cd git clone https://github.com/your-username/your-repository-name.git
+cd Dockerized-data-pipeline-to-fetch-stockmarket-data
+
+
 
