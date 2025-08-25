@@ -32,7 +32,7 @@ cd Dockerized-data-pipeline-to-fetch-stockmarket-data
 ```
 
 ### 2. Configure Environment Variables
-This project uses an `.env` file to manage secret credentials. A secure template (`.env.example`) is provided.
+This project uses an `.env` file to manage secret credentials.
 
 Copy the template file:
 
