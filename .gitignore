@@ -1,0 +1,14 @@
+# Ignore the file containing secret credentials
+.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore Docker-related local data (optional but good practice)
+.dockerignore
+docker-compose.override.yml
+
+# Ignore common OS files
+.DS_Store
+Thumbs.db
