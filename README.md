@@ -25,7 +25,6 @@ The pipeline is built to meet all assignment requirements:
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed on your system:
 
 - Docker
 - Docker Compose (Included with Docker Desktop)
@@ -158,3 +157,4 @@ To remove the containers and the persisted PostgreSQL volume (deleting all store
 ```bash
 docker-compose down -v
 ```
+
