@@ -1,0 +1,72 @@
+# docker-compose.yml
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres_db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dagster-webserver:
+    build: .
+    container_name: dagster_webserver
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=postgres
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - DAGSTER_HOME=/opt/dagster/dagster_home/
+    ports:
+      - "8081:3000"
+    volumes:
+      - ./jobs:/opt/dagster/app/jobs
+      - ./scripts:/opt/dagster/app/scripts
+      - ./dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+    env_file:
+      - .env
+    restart: unless-stopped
+    # Use `dagit` (Dagster web UI). `dagster-webserver` is lower-level; `dagit` provides the UI.
+    command: >
+      dagit -h 0.0.0.0 -p 3000 -f jobs/workspace.py
+
+  dagster-daemon:
+    build: .
+    container_name: dagster_daemon
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=postgres
+      - DAGSTER_HOME=/opt/dagster/dagster_home/
+    volumes:
+      - ./jobs:/opt/dagster/app/jobs
+      - ./scripts:/opt/dagster/app/scripts
+      - ./dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+    env_file:
+      - .env
+    restart: unless-stopped
+    # Start the Dagster daemon to pick up schedules and sensors
+    # Point the daemon at the workspace file for repository discovery
+    command: "dagster-daemon run -f jobs/workspace.py"
+
+volumes:
+  postgres_data:
