@@ -31,7 +31,7 @@ The pipeline is built to meet all assignment requirements:
 
 ## Getting Started (How to Build and Deploy)
 
-Follow these steps to build and run the entire pipeline stack.
+
 
 ### 1. Clone the Repository
 
@@ -157,4 +157,5 @@ To remove the containers and the persisted PostgreSQL volume (deleting all store
 ```bash
 docker-compose down -v
 ```
+
 
